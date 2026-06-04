@@ -1,0 +1,36 @@
+{
+    "name": "@tinycld/todo",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Todo for your organization",
+    "exports": {
+        "./package.json": "./package.json",
+        "./manifest": "./manifest.ts",
+        "./types": "./tinycld/todo/types.ts",
+        "./collections": "./tinycld/todo/collections.ts",
+        "./screens/*": "./tinycld/todo/screens/*.tsx",
+        "./seed": "./tinycld/todo/seed.ts",
+        "./sidebar": "./tinycld/todo/sidebar.tsx",
+        "./provider": "./tinycld/todo/provider.tsx",
+        "./hooks/*": "./tinycld/todo/hooks/*.ts",
+        "./components/*": "./tinycld/todo/components/*.tsx"
+    },
+    "scripts": {
+        "typecheck": "tinycld-pkg typecheck",
+        "test": "tinycld-pkg test",
+        "test:e2e": "tinycld-pkg test:e2e",
+        "check": "tinycld-pkg check"
+    },
+    "devDependencies": {
+        "@tinycld/package-scripts": "*"
+    },
+    "peerDependencies": {
+        "react": ">=19",
+        "react-native": ">=0.83",
+        "expo-router": ">=55.0.0",
+        "pbtsdb": ">=0.5",
+        "@tanstack/react-db": ">=0.1",
+        "@tanstack/db": ">=0.6"
+    }
+}
