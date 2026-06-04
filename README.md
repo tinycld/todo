@@ -2,6 +2,25 @@
 
 Todo for your organization
 
+![Todo app screenshot](./todo-app.png)
+
+This app was created entirely from the below prompt. It's 
+used to judge how accurate our documentation and tooling
+is.
+
+> I'm testing the TinyCld framework from tinycld.org.
+>
+> To do so I'd like you to create a stereotypical TODO app.  Read the docs at
+> https://tinycld.org/llms.txt and create a test package that implements a very
+> simple TODO app. the TODO should have the functionality that's typical of test
+> apps like this, but in order to test it fully, also generate a golang service
+> that marks todo's as not completed if their description is modified.
+>
+> Use the the tinycld bootstrap cli and accept all defaults.
+>
+> Work autonomously as much as possible only reporting errors when stuck
+
+
 A feature package for the [tinycld](https://tinycld.org/) ecosystem. It lives in
 its own git repo and is developed as a **workspace member** alongside the app
 shell (`app`), `@tinycld/core` (its own standalone repo, cloned as a sibling —
