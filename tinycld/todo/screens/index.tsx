@@ -6,6 +6,7 @@ import { useOrgLiveQuery } from '@tinycld/core/lib/use-org-live-query'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
+import { TagChips } from '../components/tag-editor'
 import { useTodoMutations } from '../hooks/use-todo-mutations'
 import type { TodoItem } from '../types'
 
@@ -143,17 +144,20 @@ export default function TodoIndex() {
                                     accessibilityRole="button"
                                     accessibilityLabel={`Edit ${item.description}`}
                                 >
-                                    <Text
-                                        style={{
-                                            color: item.completed ? muted : fg,
-                                            fontSize: 15,
-                                            textDecorationLine: item.completed
-                                                ? 'line-through'
-                                                : 'none',
-                                        }}
-                                    >
-                                        {item.description}
-                                    </Text>
+                                    <View className="gap-1">
+                                        <Text
+                                            style={{
+                                                color: item.completed ? muted : fg,
+                                                fontSize: 15,
+                                                textDecorationLine: item.completed
+                                                    ? 'line-through'
+                                                    : 'none',
+                                            }}
+                                        >
+                                            {item.description}
+                                        </Text>
+                                        <TagChips todoId={item.id} />
+                                    </View>
                                 </Pressable>
 
                                 <Pressable

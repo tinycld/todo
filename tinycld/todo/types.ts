@@ -13,11 +13,45 @@ export interface TodoItem {
     updated: string
 }
 
+// A distinct tag name within an org. `name` is the arbitrary text the user
+// types; find-or-create (see use-tag-mutations.ts) keeps one row per name.
+export interface Tag {
+    id: string
+    name: string
+    owner: string
+    created: string
+    updated: string
+}
+
+// Join row linking a todo to a tag (many todos ↔ many tags).
+export interface TodoTag {
+    id: string
+    todo: string
+    tag: string
+    owner: string
+    created: string
+    updated: string
+}
+
 export type TodoSchema = {
     todo_items: {
         type: TodoItem
         relations: {
             owner: Users
+        }
+    }
+    tags: {
+        type: Tag
+        relations: {
+            owner: UserOrg
+        }
+    }
+    todo_tags: {
+        type: TodoTag
+        relations: {
+            todo: TodoItem
+            tag: Tag
+            owner: UserOrg
         }
     }
 }

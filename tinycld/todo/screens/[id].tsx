@@ -6,6 +6,7 @@ import { useOrgLiveQuery } from '@tinycld/core/lib/use-org-live-query'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
+import { TagEditor } from '../components/tag-editor'
 import { useTodoMutations } from '../hooks/use-todo-mutations'
 import type { TodoItem } from '../types'
 
@@ -125,6 +126,8 @@ function TodoEditor({ item }: { item: TodoItem }) {
                         Editing the description will mark this todo as not completed.
                     </Text>
                 ) : null}
+
+                <TagEditor todoId={item.id} />
 
                 <View className="flex-row gap-2">
                     <Pressable

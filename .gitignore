@@ -1,0 +1,13 @@
+# Vitest's on-disk cache — churns on every test run, never useful to commit.
+node_modules/.vite/
+
+# Local PocketBase data (created when running a dev server).
+pb_data/
+
+# Build / test output
+coverage/
+playwright-report/
+test-results/
+
+# Editor / OS noise
+.DS_Store
