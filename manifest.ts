@@ -1,7 +1,7 @@
 const manifest = {
     name: 'Todo',
     slug: 'todo',
-    version: '0.1.0',
+    version: '1.0.0',
     description: 'Todo for your organization',
     routes: { directory: 'screens' },
     nav: {
