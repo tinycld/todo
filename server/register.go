@@ -15,7 +15,14 @@ import (
 // caller — the app UI, a third-party API client, an admin edit, anything that
 // updates the record goes through the same hook.
 func Register(app *pocketbase.PocketBase) {
-	bindUncompleteOnDescriptionChange(app)
+	// FIXTURE: intentional bootstrap panic for the rollback integration test
+	// (tag v0.0.1-pre-buggy-server). Register runs synchronously inside
+	// coreserver.Register, BEFORE app.Start(), so this crashes the new binary on
+	// boot → /api/health never answers → the entrypoint health probe fails → the
+	// install is rolled back to the previous healthy build. The package's own
+	// `go test` is unaffected: register_test.go calls
+	// bindUncompleteOnDescriptionChange directly, not Register.
+	panic("todo fixture: intentional bootstrap panic (v0.0.1-pre-buggy-server)")
 }
 
 // bindUncompleteOnDescriptionChange registers a pre-update hook on the
