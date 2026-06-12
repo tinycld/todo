@@ -83,3 +83,22 @@ exactly what a developer runs locally.
 - `vitest.config.ts` (and `playwright.config.ts` — full preset only) — thin configs spreading the app's
 - `tinycld/todo/` — the package's TypeScript surface (screens, collections, …)
 - `tests/` — vitest unit tests (and Playwright e2e specs — full preset only)
+
+## Test fixture tags
+
+Besides being a real package, this repo is the fixture for the app's package
+install/upgrade/rollback integration test (`tests/install/run-todo-install.sh` in
+the `tinycld` repo). That test pins installs to specific tags:
+
+| Tag | On `main`? | What it is |
+| --- | --- | --- |
+| `v1.0.0` | yes (ancestor) | Baseline: `create_todo` migration only, package version `1.0.0`. |
+| `v2.0.0` | yes (= `main`) | Adds the `create_tags` migration (tags + todo_tags), version `2.0.0`. |
+| `v0.0.1-pre-buggy-server` | **no** | Side commit off `v1.0.0` that `panic()`s in `server/register.go`'s `Register()` at bootstrap. Exercises the installer's **automatic rollback** when the new build crashes on restart. |
+| `v0.0.1-pre-buggy-migration` | **no** | Side commit off `v1.0.0` adding a migration whose UP throws **only at the real server's boot** (it no-ops during the build's schema export). Exercises rollback on a failing migration. |
+| `v0.0.1-pre-buggy-fe` | **no** | Side commit off `v1.0.0` with an unresolved import in `screens/_layout.tsx` so the web build (`expo export`) fails. Exercises the **pre-swap build-failure** path (install aborts, no rollback). |
+
+The three `v0.0.1-pre-buggy-*` tags are **test-only** and intentionally **not on
+`main`'s lineage**, so a normal clone or `main` build never includes the bug — only
+an install pinned to one of those tags does. They each carry only the one
+intentional defect on top of the `v1.0.0` tree. Don't merge them into `main`.
