@@ -10,7 +10,7 @@ import { TagChips } from '../components/tag-editor'
 import { useTodoMutations } from '../hooks/use-todo-mutations'
 import type { TodoItem } from '../types'
 
-// Org-scoped index route for Todo, served at /a/<orgSlug>/todo.
+// Index route for Todo, served at /todo.
 // A typical todo list: add via the input, toggle the checkbox, tap a row to
 // edit its description, or delete it inline.
 export default function TodoIndex() {

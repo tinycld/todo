@@ -1,18 +1,18 @@
 import { and, eq } from '@tanstack/db'
+import { useAuth } from '@tinycld/core/lib/auth'
 import { captureException } from '@tinycld/core/lib/errors'
 import { mutation, useMutation } from '@tinycld/core/lib/mutations'
 import { pb, useStore } from '@tinycld/core/lib/pocketbase'
-import { useCurrentRole } from '@tinycld/core/lib/use-current-role'
 import { useOrgLiveQuery } from '@tinycld/core/lib/use-org-live-query'
 import { newRecordId } from 'pbtsdb/core'
 import { isStatus } from '../lib/is-status'
 import type { Tag, TodoTag } from '../types'
 
-// Org-scoped tagging for todos. `tags` holds one row per distinct name; a todo
+// User-scoped tagging for todos. `tags` holds one row per distinct name; a todo
 // is linked to a tag through a `todo_tags` join row.
 //
 // addTag uses find-or-create: it looks for an existing tag with the given name
-// in this org, creates one only if none exists, then links it to the todo. The
+// for this user, creates one only if none exists, then links it to the todo. The
 // (owner, name) unique index in the migration backs this — two near-simultaneous
 // creates of the same name surface as a unique-constraint error rather than a
 // duplicate row, and we recover by re-reading the now-existing tag.
@@ -21,13 +21,13 @@ export function useTagMutations() {
     // pbtsdb store) so unique-constraint errors surface as a plain 400; only the
     // join store is needed here for inserts/deletes.
     const [todoTags] = useStore('todo_tags')
-    const { userOrgId } = useCurrentRole()
+    const { user } = useAuth()
 
     const onError = (error: unknown) => {
         captureException('Tag action failed', error)
     }
 
-    // Find an existing tag by name for this org, or create it. Returns the
+    // Find an existing tag by name for this user, or create it. Returns the
     // tag id. Both the read and the create go through the PocketBase client
     // directly (rather than the pbtsdb store) so the unique-constraint error
     // surfaces as a plain PocketBase 400 we can branch on; the store still
@@ -35,7 +35,7 @@ export function useTagMutations() {
     // which likewise hit `pb.collection(...)` for read-then-write flows.
     const findOrCreateTag = async (name: string): Promise<string> => {
         const filter = pb.filter('owner = {:owner} && name = {:name}', {
-            owner: userOrgId,
+            owner: user.id,
             name,
         })
         const findExisting = () => pb.collection('tags').getFirstListItem<Tag>(filter)
@@ -50,7 +50,7 @@ export function useTagMutations() {
         try {
             const created = await pb
                 .collection('tags')
-                .create<Tag>({ id: newRecordId(), name, owner: userOrgId })
+                .create<Tag>({ id: newRecordId(), name, owner: user.id })
             return created.id
         } catch (error) {
             // Lost a create race against the unique (owner, name) index — the
@@ -90,7 +90,7 @@ export function useTagMutations() {
                         id: newRecordId(),
                         todo: todoId,
                         tag: tagId,
-                        owner: userOrgId,
+                        owner: user.id,
                     })
                 })()
             } catch (error) {
@@ -132,12 +132,12 @@ export function useTodoTags(todoId: string): TodoTagView[] {
     // An explicit .select() flattens the result to { todoTagId, tagId, name }
     // rows, so we don't depend on the default namespaced join-row shape.
     const { data } = useOrgLiveQuery(
-        (query, { userOrgId }) =>
+        (query, { userId }) =>
             query
                 .from({ todo_tags: todoTags })
                 .join({ tags }, ({ todo_tags, tags }) => eq(todo_tags.tag, tags.id), 'inner')
                 .where(({ todo_tags }) =>
-                    and(eq(todo_tags.todo, todoId), eq(todo_tags.owner, userOrgId))
+                    and(eq(todo_tags.todo, todoId), eq(todo_tags.owner, userId))
                 )
                 .select(({ todo_tags, tags }) => ({
                     todoTagId: todo_tags.id,

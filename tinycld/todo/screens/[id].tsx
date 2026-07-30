@@ -10,7 +10,7 @@ import { TagEditor } from '../components/tag-editor'
 import { useTodoMutations } from '../hooks/use-todo-mutations'
 import type { TodoItem } from '../types'
 
-// Dynamic detail route at /a/<orgSlug>/todo/<id>. Lets you edit a todo's
+// Dynamic detail route at /todo/<id>. Lets you edit a todo's
 // description. Note: saving a new description deliberately leaves `completed`
 // alone here — the Go server hook resets it to incomplete when the text
 // actually changes, so the behaviour is enforced server-side for every client.

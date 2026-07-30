@@ -14,8 +14,8 @@
 //                A unique index on (todo, tag) keeps a tag from being attached
 //                to the same todo twice.
 //
-// Auth rules follow the same org-scoped pattern as todo_items: access is
-// granted when the caller owns the `owner` user_org row.
+// Auth rules follow the same user-scoped pattern as todo_items: access is
+// granted when the caller owns the row (`owner` points at `users`).
 
 migrate(
     app => {
@@ -23,11 +23,11 @@ migrate(
             id: 'pbc_todo_tags_01',
             type: 'base',
             name: 'tags',
-            listRule: 'owner.user = @request.auth.id',
-            viewRule: 'owner.user = @request.auth.id',
-            createRule: 'owner.user = @request.auth.id',
-            updateRule: 'owner.user = @request.auth.id',
-            deleteRule: 'owner.user = @request.auth.id',
+            listRule: 'owner = @request.auth.id',
+            viewRule: 'owner = @request.auth.id',
+            createRule: 'owner = @request.auth.id',
+            updateRule: 'owner = @request.auth.id',
+            deleteRule: 'owner = @request.auth.id',
             fields: [
                 {
                     name: 'name',
@@ -40,7 +40,7 @@ migrate(
                     name: 'owner',
                     type: 'relation',
                     required: true,
-                    collectionId: 'pbc_user_org_01',
+                    collectionId: '_pb_users_auth_',
                     cascadeDelete: true,
                     maxSelect: 1,
                 },
@@ -72,11 +72,11 @@ migrate(
             id: 'pbc_todo_tag_link01',
             type: 'base',
             name: 'todo_tags',
-            listRule: 'owner.user = @request.auth.id',
-            viewRule: 'owner.user = @request.auth.id',
-            createRule: 'owner.user = @request.auth.id',
-            updateRule: 'owner.user = @request.auth.id',
-            deleteRule: 'owner.user = @request.auth.id',
+            listRule: 'owner = @request.auth.id',
+            viewRule: 'owner = @request.auth.id',
+            createRule: 'owner = @request.auth.id',
+            updateRule: 'owner = @request.auth.id',
+            deleteRule: 'owner = @request.auth.id',
             fields: [
                 {
                     name: 'todo',
@@ -98,7 +98,7 @@ migrate(
                     name: 'owner',
                     type: 'relation',
                     required: true,
-                    collectionId: 'pbc_user_org_01',
+                    collectionId: '_pb_users_auth_',
                     cascadeDelete: true,
                     maxSelect: 1,
                 },

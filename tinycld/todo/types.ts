@@ -43,7 +43,7 @@ export type TodoSchema = {
     tags: {
         type: Tag
         relations: {
-            owner: UserOrg
+            owner: Users
         }
     }
     todo_tags: {
@@ -51,7 +51,7 @@ export type TodoSchema = {
         relations: {
             todo: TodoItem
             tag: Tag
-            owner: UserOrg
+            owner: Users
         }
     }
 }

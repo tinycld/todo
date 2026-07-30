@@ -27,7 +27,7 @@ export function registerCollections(
 
     const tags = newCollection('tags', {
         omitOnInsert: ['created', 'updated'] as const,
-        expand: { owner: core.user_org },
+        expand: { owner: core.users },
         ...indexing,
     })
 
@@ -35,7 +35,7 @@ export function registerCollections(
     // relations under expand lets queries load the linked records eagerly.
     const todo_tags = newCollection('todo_tags', {
         omitOnInsert: ['created', 'updated'] as const,
-        expand: { todo: todo_items, tag: tags, owner: core.user_org },
+        expand: { todo: todo_items, tag: tags, owner: core.users },
         ...indexing,
     })
 

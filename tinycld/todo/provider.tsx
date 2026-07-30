@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-// Optional context provider mounted by core inside /a/[orgSlug]/todo.
+// Optional context provider mounted by core inside /todo.
 // Wrap any package-specific context providers or run mount-time side
 // effects (e.g. subscribing to events, prefetching queries) here.
 //

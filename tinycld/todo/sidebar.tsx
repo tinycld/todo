@@ -6,7 +6,7 @@ import { Text, View } from 'react-native'
 import type { TodoItem } from './types'
 
 // Sidebar for the Todo package. Rendered in the workspace drawer when a user
-// is on any /a/<orgSlug>/todo/... route. Shows a live count of remaining and
+// is on any /todo/... route. Shows a live count of remaining and
 // completed items for the current org.
 export default function TodoSidebar() {
     const fg = useThemeColor('foreground')

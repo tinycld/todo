@@ -23,13 +23,13 @@ export default async function seed(pb: PocketBase, ctx: SeedContext): Promise<vo
         { description: 'Ship it', completed: false, tags: ['code'] },
     ]
 
-    // Reuse one tag row per distinct name within the org (the same find-or-create
+    // Reuse one tag row per distinct name for this user (the same find-or-create
     // behaviour the UI relies on, backed by the unique (owner, name) index).
     const tagIds = new Map<string, string>()
     const findOrCreateTag = async (name: string): Promise<string> => {
         const cached = tagIds.get(name)
         if (cached) return cached
-        const tag = await pb.collection('tags').create({ name, owner: ctx.userOrg.id })
+        const tag = await pb.collection('tags').create({ name, owner: ctx.user.id })
         tagIds.set(name, tag.id)
         return tag.id
     }
@@ -46,7 +46,7 @@ export default async function seed(pb: PocketBase, ctx: SeedContext): Promise<vo
             await pb.collection('todo_tags').create({
                 todo: todo.id,
                 tag: tagId,
-                owner: ctx.userOrg.id,
+                owner: ctx.user.id,
             })
         }
     }
