@@ -1,15 +1,15 @@
+import { useAuth } from '@tinycld/core/lib/auth'
 import { captureException } from '@tinycld/core/lib/errors'
 import { mutation, useMutation } from '@tinycld/core/lib/mutations'
 import { useStore } from '@tinycld/core/lib/pocketbase'
-import { useCurrentRole } from '@tinycld/core/lib/use-current-role'
 import { newRecordId } from 'pbtsdb/core'
 
-// Org-scoped mutations for todo_items. Each row is owned by the caller's
-// user_org (see the create rule in pb-migrations). New items default to
-// incomplete; toggling and editing run as in-place updates.
+// User-scoped mutations for todo_items. Single-org deployment: each row is
+// owned by the caller's `users` record (see the create rule in pb-migrations).
+// New items default to incomplete; toggling and editing run as in-place updates.
 export function useTodoMutations() {
     const [todoItems] = useStore('todo_items')
-    const { userOrgId } = useCurrentRole()
+    const { user } = useAuth()
 
     const onError = (error: unknown) => {
         captureException('Todo action failed', error)
@@ -21,7 +21,7 @@ export function useTodoMutations() {
                 id: newRecordId(),
                 description,
                 completed: false,
-                owner: userOrgId,
+                owner: user.id,
             })
         }),
         onError,

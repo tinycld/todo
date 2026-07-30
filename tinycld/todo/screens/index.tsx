@@ -26,10 +26,10 @@ export default function TodoIndex() {
 
     const [draft, setDraft] = useState('')
 
-    const { data } = useOrgLiveQuery((query, { userOrgId }) =>
+    const { data } = useOrgLiveQuery((query, { userId }) =>
         query
             .from({ todo_items: todoItems })
-            .where(({ todo_items }) => eq(todo_items.owner, userOrgId))
+            .where(({ todo_items }) => eq(todo_items.owner, userId))
             .orderBy(({ todo_items }) => todo_items.created, 'desc')
     )
 

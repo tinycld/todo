@@ -13,10 +13,10 @@ export default function TodoSidebar() {
     const muted = useThemeColor('muted-foreground')
 
     const [todoItems] = useStore('todo_items')
-    const { data } = useOrgLiveQuery((query, { userOrgId }) =>
+    const { data } = useOrgLiveQuery((query, { userId }) =>
         query
             .from({ todo_items: todoItems })
-            .where(({ todo_items }) => eq(todo_items.owner, userOrgId))
+            .where(({ todo_items }) => eq(todo_items.owner, userId))
     )
 
     const items = (data ?? []) as TodoItem[]

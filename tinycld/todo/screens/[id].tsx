@@ -19,10 +19,10 @@ export default function TodoDetail() {
 
     const [todoItems] = useStore('todo_items')
     const { data } = useOrgLiveQuery(
-        (query, { userOrgId }) =>
+        (query, { userId }) =>
             query
                 .from({ todo_items: todoItems })
-                .where(({ todo_items }) => eq(todo_items.owner, userOrgId)),
+                .where(({ todo_items }) => eq(todo_items.owner, userId)),
         [id]
     )
 

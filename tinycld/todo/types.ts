@@ -2,7 +2,7 @@
 // generator. Each entry maps a pbtsdb collection name to its record type
 // and optional relations.
 
-import type { UserOrg } from '@tinycld/core/types/pbSchema'
+import type { Users } from '@tinycld/core/types/pbSchema'
 
 export interface TodoItem {
     id: string
@@ -17,7 +17,7 @@ export type TodoSchema = {
     todo_items: {
         type: TodoItem
         relations: {
-            owner: UserOrg
+            owner: Users
         }
     }
 }
